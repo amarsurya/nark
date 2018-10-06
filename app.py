@@ -2,11 +2,13 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for
 # from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 import os
+import pandas as pd
 
 UPLOAD_FOLDER = '/home/amar/mydir/'
 ALLOWED_EXTENSIONS = set(['csv'])
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['DEBUG'] = True
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:amaramar@localhost:5432/postgres"
@@ -14,6 +16,8 @@ app.config['SECRET_KEY'] = "amaramar"
 
 # db = SQLAlchemy(app)
 # db.init_app(app)
+
+
 
 '''
 def allowed_file(filename):
@@ -41,14 +45,17 @@ filename=""
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('test1.html')
+    return render_template('index.html')
 
 
-@app.route('/map', methods=['POST'])
+@app.route('/map', methods=['POST', 'GET'])
 def mapping():
+    # return "success"
+
     global filename
     global headstr
     global head
+
     if request.method == "POST":
         file = request.files['inputfile']
         title = file.filename
@@ -60,7 +67,7 @@ def mapping():
                 csvfile.seek(0)
                 head = csvfile.readline().rstrip().split(',')
                 return render_template('mapping.html', head=head)
-                
+
         else:
             return render_template("again.html")
 
@@ -68,10 +75,15 @@ def mapping():
         # stream = io.StringIO(f.stream.read().decode("UTF8"), newline=None)
         # csv_input = csv.reader(stream)
 
+# df = pd.read_csv(UPLOAD_FOLDER + 'new' + filename)
+# size = df.shape[0]
+
+
+
+
 @app.route('/headers', methods=['POST'])
 def headers():
-
-
+    global size
     if request.method == 'POST':
         newhead = {
             request.form['A']:"Age",
@@ -97,7 +109,31 @@ def headers():
         del s
         csvfile.close()
         newcsv.close()
-        return render_template("filtering.html")
+        df = pd.read_csv(UPLOAD_FOLDER + 'new' + filename)
+        size = df.shape[0]
+        del df
+
+        return render_template("filtering.html", size=size)
+
+
+@app.route('/filter', methods=['POST'])
+def filter():
+    if request.method == 'POST':
+        age = int(request.form['age'])
+        gender = str(request.form['gender'])
+        date_of_issue = str(request.form['doi'])
+        married = str(request.form['married'])
+        loan_amount = float(request.form['loan'])
+        return "{} {} {} {} {}".format(age,gender,date_of_issue,married,loan_amount)
+
+        # df = pd.read_csv(UPLOAD_FOLDER+'new'+filename)
+        # size = df.shape[0]
+        # print(size)
+
+
+
+
 
 if __name__ == "__main_":
     app.run(debug=True)
+    # app.run(host='0.0.0.0')

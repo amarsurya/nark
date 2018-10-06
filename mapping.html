@@ -90,15 +90,15 @@
                                         Kindly map the following attributes with <b>Northern Arc</b> schema:
 
                                     </p>
-                                    <form action = "/headers" method="post">
-                                    <table>
-                                      <tr>
-                                        <th>Northern Arc</th>
-                                        <th>Attribute</th>
-                                      </tr>
+                                    <form action = '/headers' method="POST">
+                                        <table>
+                                          <tr>
+                                            <th>MCD Attribute</th>
+                                            <th>Northern Arc schema</th>
+                                          </tr>
 
-                                     <tr>
-                                            <td>Age</td>
+                                         <tr>
+                                             <td><b>Age</b></td>
                                             <td>
                                             <select name="A">
                                             <option value={{ head[0] }}>{{ head[0] }}</option>
@@ -108,10 +108,9 @@
                                             <option value={{ head[4] }}>{{ head[4] }}</option>
                                             </select>
                                             </td>
-                                     </tr>
-
-                                          <tr>
-                                            <td>Gender</td>
+                                         </tr>
+                                            <tr>
+                                                <td><b>Gender</b></td>
                                             <td>
                                             <select name="B">
                                             <option value={{ head[0] }}>{{ head[0] }}</option>
@@ -121,10 +120,10 @@
                                             <option value={{ head[4] }}>{{ head[4] }}</option>
                                             </select>
                                             </td>
-                                          </tr>
+                                         </tr>
 
-                                          <tr>
-                                            <td>Date of Issue</td>
+                                            <tr>
+                                                <td><b>Date_of_Issue</b></td>
                                             <td>
                                             <select name="C">
                                             <option value={{ head[0] }}>{{ head[0] }}</option>
@@ -134,10 +133,10 @@
                                             <option value={{ head[4] }}>{{ head[4] }}</option>
                                             </select>
                                             </td>
-                                          </tr>
+                                         </tr>
 
-                                          <tr>
-                                            <td>Married</td>
+                                            <tr>
+                                                <td><b>Married</b></td>
                                             <td>
                                             <select name="D">
                                             <option value={{ head[0] }}>{{ head[0] }}</option>
@@ -147,11 +146,10 @@
                                             <option value={{ head[4] }}>{{ head[4] }}</option>
                                             </select>
                                             </td>
-                                          </tr>
+                                         </tr>
 
-
-                                          <tr>
-                                            <td>Loan Amount</td>
+                                            <tr>
+                                                <td><b>Loan_Amount</b></td>
                                             <td>
                                             <select name="E">
                                             <option value={{ head[0] }}>{{ head[0] }}</option>
@@ -161,12 +159,16 @@
                                             <option value={{ head[4] }}>{{ head[4] }}</option>
                                             </select>
                                             </td>
-                                          </tr>
+                                         </tr>
 
-                                    </table>
+
+
+
+
+                                        </table>
 
                                     <div>
-                                    <input type="submit" value="Submit">
+                                    <input type="submit" value="Submit"></input>
                                     </div>
 
                                     </form>
