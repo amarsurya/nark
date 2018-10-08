@@ -32,8 +32,6 @@ def index():
 
 @app.route('/map', methods=['POST', 'GET'])
 def mapping():
-    # return "success"
-
     global filename
     global headstr
     global head
@@ -49,7 +47,6 @@ def mapping():
                 csvfile.seek(0)
                 head = csvfile.readline().rstrip().split(',')
                 return render_template('mapping.html', head=head)
-
         else:
             return render_template("again.html")
 
