@@ -1,11 +1,11 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for
-# from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 import os
 import pandas as pd
 
 UPLOAD_FOLDER = '/home/amar/mydir/'
-ALLOWED_EXTENSIONS = set(['csv'])
+ALLOWED_EXTENSIONS = {'csv'}
 
 app = Flask(__name__, static_url_path='')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
@@ -14,24 +14,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:amaramar@localhost:5432/postgres"
 app.config['SECRET_KEY'] = "amaramar"
 
-# db = SQLAlchemy(app)
-# db.init_app(app)
-
-
-
-'''
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-class Contents(db.Model):
-    __tablename__ = "example"
-    id = db.Column(db.Integer, primary_key=True)
-    age = db.Column(db.Integer)
-    name = db.Column(db.String(length=50))
-    married = db.Column(db.Boolean)
-    date = db.Column(db.DATE)
-'''
 def allowed_file(title):
     f = title.split('.')[-1]
     if f in ALLOWED_EXTENSIONS:
@@ -39,11 +21,11 @@ def allowed_file(title):
     else:
         return False
 
-headstr=""
-head=[]
-filename=""
+headstr = ""
+head = []
+filename = ""
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET','POST'])
 def index():
     return render_template('index.html')
 
@@ -71,14 +53,8 @@ def mapping():
         else:
             return render_template("again.html")
 
-
         # stream = io.StringIO(f.stream.read().decode("UTF8"), newline=None)
         # csv_input = csv.reader(stream)
-
-# df = pd.read_csv(UPLOAD_FOLDER + 'new' + filename)
-# size = df.shape[0]
-
-
 
 
 @app.route('/headers', methods=['POST'])
@@ -98,7 +74,7 @@ def headers():
         C1 = newhead[head[2]]
         D1 = newhead[head[3]]
         E1 = newhead[head[4]]
-        newheadstr =  "{},{},{},{},{}".format(A1,B1,C1,D1,E1)
+        newheadstr = "{},{},{},{},{}".format(A1,B1,C1,D1,E1)
 
         csvfile = open(UPLOAD_FOLDER+filename, 'r')
         newcsv = open(UPLOAD_FOLDER+'new'+filename, 'w')
@@ -121,17 +97,10 @@ def filter():
     if request.method == 'POST':
         age = int(request.form['age'])
         gender = str(request.form['gender'])
-        date_of_issue = str(request.form['doi'])
+        doi = str(request.form['doi'])
         married = str(request.form['married'])
-        loan_amount = float(request.form['loan'])
-        return "{} {} {} {} {}".format(age,gender,date_of_issue,married,loan_amount)
-
-        # df = pd.read_csv(UPLOAD_FOLDER+'new'+filename)
-        # size = df.shape[0]
-        # print(size)
-
-
-
+        amount = float(request.form['loan'])
+        return "{} {} {} {} {}".format(age,gender,doi,married,amount)
 
 
 if __name__ == "__main_":
