@@ -28,7 +28,13 @@
 			<link rel="stylesheet" href="css/animate.min.css">
 			<link rel="stylesheet" href="css/owl.carousel.css">
 			<link rel="stylesheet" href="css/main.css">
-		</head>
+        <script>
+        $( function updateTextInput(val) {
+          document.getElementById('textInput').value=val;
+        };
+        </script>
+
+        </head>
 		<body>
 
 			  <header id="header" id="home">
@@ -69,34 +75,47 @@
                                     <br>
                                     <br>
                                     <br>
-                                    <h2>Filtering</h2>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <h2><b>Filtering</b></h2>
                                     <p class="sample-text">
                                         Kindly apply the following filters with <b>Northern Arc</b> schema:
                                     <form action = '/filter' method = 'POST'>
+
+
+
+                                        <b>Age < </b>
+{#                                        <input type="range" min="1" max="100" name="age" onchange="updateTextInput(this.value);" ><br><br>#}
+                                        <input type="number"  value="0" name="age">
                                         <br>
-                                        The current pool size is <b>{{ size }}</b>
                                         <br>
-                                       Age:<br>
-                                       <input type="number" min="1" name="age" required><br><br>
 
-                                       Gender:<br>
-                                       <input type="radio" name="gender" value="M" checked required> Male<br>
-                                       <input type="radio" name="gender" value="F" required> Female<br>
-                                       <input type="radio" name="gender" value="O" required> Other<br><br>
+                                       <b>Gender</b>
+                                       <input type="radio" name="gender" value="m" > Male<br>
+                                       <input type="radio" name="gender" value="f" > Female<br>
+{#                                       <input type="radio" name="gender" value="o" > Other<br><br>#}
 
 
-                                       Date of Issue: <input type="date" name="doi" required><br><br>
+                                       <b>Date of Issue</b> <input type="date" name="doi" ><br><br>
 
-                                       Married:<br>
-                                       <input type="radio" name="married" value="Y" checked required>Yes<br>
-                                       <input type="radio" name="married" value="N" required>No<br><br>
+                                        <b>Married</b>
+                                       <input type="radio" name="married" value="y" >Yes<br>
+                                       <input type="radio" name="married" value="n" >No<br><br>
 
-                                       Loan Amount requested:<br>
-                                       <input type="float" name="loan" required><br><br>
+                                        <b>Loan Amount requested</b>
+                                       <input type="float" name="loan" value="0" ><br><br>
+                                        <br>
+                                        <p>The current pool size is <b>{{ size }}</b></p>
+                                        <br>
+{#                                    <input type="submit" value="Submit">#}
+                                        <input class="primary-btn header-btn text-uppercase" type="submit" value="Submit">
 
-
-                                    <input type="submit" value="Submit">
-
+{#                                        <p><a href="newfiltereddata.csv" download="newpool.csv">Download new pool</a> </p>#}
                                     </form>
                                 </body>
                             </section>
