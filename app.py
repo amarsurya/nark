@@ -5,6 +5,7 @@ import os
 import pandas as pd
 
 UPLOAD_FOLDER = '/home/amar/mydir/'
+pool_folder = '/home/amar/PycharmProjects/nark/templates/'
 ALLOWED_EXTENSIONS = {'csv'}
 
 app = Flask(__name__, static_url_path='')
@@ -23,6 +24,7 @@ def allowed_file(title):
 
 headstr = ""
 head = []
+newheadlst = []
 filename = ""
 
 @app.route('/', methods=['GET','POST'])
@@ -57,6 +59,7 @@ def mapping():
 @app.route('/headers', methods=['POST'])
 def headers():
     global size
+    global newheadlst
     if request.method == 'POST':
         newhead = {
             request.form['A']:"Age",
@@ -71,6 +74,8 @@ def headers():
         C1 = newhead[head[2]]
         D1 = newhead[head[3]]
         E1 = newhead[head[4]]
+
+        newheadlst = [A1,B1,C1,D1,E1]
         newheadstr = "{},{},{},{},{}".format(A1,B1,C1,D1,E1)
 
         csvfile = open(UPLOAD_FOLDER+filename, 'r')
@@ -88,16 +93,86 @@ def headers():
 
         return render_template("filtering.html", size=size)
 
+'''
+@app.route('/filter', methods=['POST'])
+def filter():
+    if request.method == 'POST':
+        df = pd.read_csv(UPLOAD_FOLDER + 'new' + filename)
+
+        age = int(request.form['age'])
+        if "m" or "f" in request.form['gender']:
+            gender = str(request.form['gender'])
+        else:
+            gender = "na"
+        doi = str(request.form['doi'])
+        if "y" or "n" in request.form['married']:
+            married = str(request.form['married'])
+        else:
+            married = "na"
+        loan = float(request.form['loan'])
+        # return "{} {} {} {} {}".format(age,gender,doi,married,loan)
+        #
+        # df = pd.read_csv(UPLOAD_FOLDER + 'new' + filename)
+        params = [age,gender,doi,married,loan]
+        return"{}".format(params)
+
+        # df1 = df.loc[lambda df: df.Age < age]
+        # df2 = df1.loc[lambda df1: df.Gender == gender]
+        # print(df2)
+        # jj = df2.shape[0]
+        # return "{}".format(df2)
+        # add = UPLOAD_FOLDER+'new'+filename
+        # return render_template("filteringnew.html", size = jj)
+'''
 
 @app.route('/filter', methods=['POST'])
 def filter():
     if request.method == 'POST':
+        df = pd.read_csv(UPLOAD_FOLDER + 'new' + filename)
+
         age = int(request.form['age'])
-        gender = str(request.form['gender'])
+        if "m" or "f" in request.form['gender']:
+            gender = str(request.form['gender'])
+        else:
+            gender = "na"
         doi = str(request.form['doi'])
-        married = str(request.form['married'])
-        amount = float(request.form['loan'])
-        return "{} {} {} {} {}".format(age,gender,doi,married,amount)
+        if "y" or "n" in request.form['married']:
+            married = str(request.form['married'])
+        else:
+            married = "na"
+        loan = float(request.form['loan'])
+
+        if age == 0:
+            df1 = df
+        else:
+            df1 = df.loc[lambda df: df.Age < age]
+
+        if gender == "na":
+            df2 = df1
+        else:
+            df2 = df1.loc[lambda df1: df.Gender == gender]
+
+        # if doi == '':
+            # df3 = df2
+        # else:
+            # df3 = df2.loc[lambda df2: df.Date_of_Issue == doi]
+
+        if married == "na":
+            df4 = df2
+        else:
+            df4 = df2.loc[lambda df2: df.Married == married]
+
+        if loan == 0:
+            df5 = df4
+        else:
+            df5 = df4.loc[lambda df4: df.Loan_Amount < loan]
+
+        newsize = df5.shape[0]
+
+        df5.to_csv('newfiltered' + filename, index=False)
+
+        return render_template("filteringnew.html", size=newsize)
+        # return render_template("filteringnew.html", size=newsize)
 
 
 if __name__ == "__main_":
