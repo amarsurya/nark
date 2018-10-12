@@ -5,7 +5,8 @@ import os
 import pandas as pd
 
 UPLOAD_FOLDER = '/home/amar/mydir/'
-pool_folder = '/home/amar/PycharmProjects/nark/templates/'
+static_folder = '/home/amar/PycharmProjects/nark/static/'
+templates_folder = '/home/amar/PycharmProjects/nark/templates/'
 ALLOWED_EXTENSIONS = {'csv'}
 
 app = Flask(__name__, static_url_path='')
@@ -26,10 +27,12 @@ headstr = ""
 head = []
 newheadlst = []
 filename = ""
+newsize = ''
+df = pd.DataFrame()
 
 @app.route('/', methods=['GET','POST'])
 def index():
-    return render_template('index.html')
+    return render_template("index.html")
 
 
 @app.route('/map', methods=['POST', 'GET'])
@@ -60,6 +63,7 @@ def mapping():
 def headers():
     global size
     global newheadlst
+    global df
     if request.method == 'POST':
         newhead = {
             request.form['A']:"Age",
@@ -94,6 +98,7 @@ def headers():
         return render_template("filtering.html", size=size)
 
 '''
+
 @app.route('/filter', methods=['POST'])
 def filter():
     if request.method == 'POST':
@@ -125,9 +130,10 @@ def filter():
         # return render_template("filteringnew.html", size = jj)
 '''
 
-@app.route('/filter', methods=['POST'])
+@app.route('/templates', methods=['POST'])
 def filter():
     if request.method == 'POST':
+        global newsize
         df = pd.read_csv(UPLOAD_FOLDER + 'new' + filename)
 
         age = int(request.form['age'])
@@ -168,13 +174,17 @@ def filter():
             df5 = df4.loc[lambda df4: df.Loan_Amount < loan]
 
         newsize = df5.shape[0]
-
-        df5.to_csv('newfiltered' + filename, index=False)
-
+        df6 = df5
+        df5.to_csv(static_folder+'short'+filename, index=False)
+        df6.to_csv(templates_folder+'short'+filename, index=False)
+        df6.to_html('templates/newpool.html')
+        # jj = templates_folder+'newpool'+filename
         return render_template("filteringnew.html", size=newsize)
-        # return render_template("filteringnew.html", size=newsize)
 
+@app.route('/viewpool')
+def viewpool():
+    return render_template("newpool.html")
 
 if __name__ == "__main_":
-    app.run(debug=True)
+    app.run()
     # app.run(host='0.0.0.0')
